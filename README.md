@@ -12,3 +12,7 @@ The service exposes two endpoints:
 `go build && ./market-data-api`
 
 The service will be available at http://localhost:9999
+
+## Caching
+
+The service periodically fetches the data from a hardcoded Mainnet data node and stores it in memory. It currently uses the Nodes Guru data node and updates the cache once every 5 minutes.
