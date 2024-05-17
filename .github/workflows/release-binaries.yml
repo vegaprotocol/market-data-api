@@ -1,5 +1,5 @@
 ---
-name: Release vega-assistant
+name: Release market-data-api
 
 "on":
   push:
@@ -33,14 +33,14 @@ jobs:
           ref: ${{ inputs.tag }}
 
       - name: Build binary
-        run: go build -o dist/vega-assistant-${{ matrix.os }}-${{ matrix.arch }} ./main.go
+        run: go build -o dist/market-data-api-${{ matrix.os }}-${{ matrix.arch }} ./main.go
 
       - name: Bundle binary in archive
         uses: thedoctor0/zip-release@master
         with:
           type: zip
           directory: dist
-          filename: vega-assistant-${{ matrix.os }}-${{ matrix.arch }}.zip
+          filename: market-data-api-${{ matrix.os }}-${{ matrix.arch }}.zip
 
       - name: Release
         uses: softprops/action-gh-release@v1
