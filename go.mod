@@ -1,6 +1,6 @@
 module market-data-api
 
-go 1.19
+go 1.21
 
 require (
 	code.vegaprotocol.io/vega v0.73.12
