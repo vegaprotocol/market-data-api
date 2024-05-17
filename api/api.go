@@ -1,21 +1,22 @@
 package api
 
 import (
-	apipb "code.vegaprotocol.io/vega/protos/data-node/api/v2"
-	"code.vegaprotocol.io/vega/protos/vega"
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/sasha-s/go-deadlock"
-	"github.com/shopspring/decimal"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"market-data-api/logging"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	apipb "code.vegaprotocol.io/vega/protos/data-node/api/v2"
+	"code.vegaprotocol.io/vega/protos/vega"
+	"github.com/gin-gonic/gin"
+	"github.com/sasha-s/go-deadlock"
+	"github.com/shopspring/decimal"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 // DataNode TODO - better if we don't use a hardcoded data node
@@ -128,7 +129,7 @@ func NewMarket(
 	} else if perp != nil {
 		productType = "Perpetual"
 		indexPrice = fromBigNumber(marketData.ProductData.GetPerpetualData().ExternalTwap, asset.GetDetails().Decimals)
-		fundingRate, _ = strconv.ParseFloat(marketData.ProductData.GetPerpetualData().FundingRate, 0)
+		fundingRate, _ = strconv.ParseFloat(marketData.ProductData.GetPerpetualData().FundingRate, 64)
 		nextFundingRate = fundingRate
 		indexCurrency = targetCurrency
 		indexName = baseCurrency
