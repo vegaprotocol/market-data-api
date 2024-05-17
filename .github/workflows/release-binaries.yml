@@ -1,0 +1,53 @@
+---
+name: Release vega-assistant
+
+"on":
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    name: "Release for ${{ matrix.os }}-${{ matrix.arch }}"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
+        os: [linux, darwin]
+    env:
+      GOOS: ${{ matrix.os }}
+      GOARCH: ${{ matrix.arch }}
+      CGO_ENABLED: 0
+
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.tag }}
+
+      - name: Build binary
+        run: go build -o dist/vega-assistant-${{ matrix.os }}-${{ matrix.arch }} ./main.go
+
+      - name: Bundle binary in archive
+        uses: thedoctor0/zip-release@master
+        with:
+          type: zip
+          directory: dist
+          filename: vega-assistant-${{ matrix.os }}-${{ matrix.arch }}.zip
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*.zip
+          name: ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
